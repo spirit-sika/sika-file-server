@@ -35,6 +35,8 @@ dependencies {
 	implementation 'com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:4.5.0'
 	// Sa-Token 权限认证，在线文档：https://sa-token.cc
 	implementation 'cn.dev33:sa-token-spring-boot3-starter:1.44.0'
+	testImplementation 'com.h2database:h2'
+	implementation 'cn.hutool:hutool-all:5.8.26'
 
 }
 

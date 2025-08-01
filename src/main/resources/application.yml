@@ -2,7 +2,7 @@ spring:
   application:
     name: sika-file-server
   datasource:
-    url: jdbc:postgresql://localhost:5432/sika_file
+    url: jdbc:postgresql://localhost:5432/sika-file
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: wjc52292

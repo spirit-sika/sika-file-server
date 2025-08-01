@@ -3,7 +3,10 @@ package cc.sika.file.entity.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,98 +15,74 @@ import java.time.LocalDateTime;
 /**
  * 用户表
  */
-@TableName(value ="SIKA_USER")
+@TableName(value ="sika_user")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class SikaUser implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@SuppressWarnings("all")
+public class SikaUser extends BaseEntityInfo implements Serializable {
     /**
      * 
      */
-    @TableId(value = "ID")
+    @TableId(value = "id")
     private Long id;
 
     /**
      * 用户名
      */
-    @TableField(value = "USERNAME")
+    @TableField(value = "username")
     private String username;
 
     /**
      * 密码
      */
-    @TableField(value = "PASSWORD")
+    @TableField(value = "password")
     private String password;
 
     /**
      * 邮箱
      */
-    @TableField(value = "EMAIL")
+    @TableField(value = "email")
     private String email;
 
     /**
      * 手机号码
      */
-    @TableField(value = "PHONE")
+    @TableField(value = "phone")
     private String phone;
 
     /**
      * 头像url
      */
-    @TableField(value = "AVATAR")
+    @TableField(value = "avatar")
     private String avatar;
 
     /**
      * 性别: 0-未知, 1-男, 2-女
      */
-    @TableField(value = "SEX")
+    @TableField(value = "sex")
     private Integer sex;
 
     /**
      * 状态, 0禁用,1-正常, 2-已删除
      */
-    @TableField(value = "STATUS")
+    @TableField(value = "status")
     private Integer status;
-
-    /**
-     * 创建时间
-     */
-    @TableField(value = "CREATE_TIME")
-    private LocalDateTime createTime;
-
-    /**
-     * 创建人用户名
-     */
-    @TableField(value = "CREATE_BY")
-    private String createBy;
-
-    /**
-     * 创建人id
-     */
-    @TableField(value = "CREATE_ID")
-    private Long createId;
-
-    /**
-     * 更新时间
-     */
-    @TableField(value = "UPDATE_TIME")
-    private LocalDateTime updateTime;
-
-    /**
-     * 更新人用户名
-     */
-    @TableField(value = "UPDATE_BY")
-    private String updateBy;
-
-    /**
-     * 更新人id
-     */
-    @TableField(value = "UPDATE_ID")
-    private Long updateId;
 
     @TableField(exist = false)
     @Serial
     private static final long serialVersionUID = 1L;
 
+    public SikaUser(LocalDateTime createTime, String createBy, Long createId, LocalDateTime updateTime, String updateBy, Long updateId, Long id, String username, String password, String email, String phone, String avatar, Integer sex, Integer status) {
+        super(createTime, createBy, createId, updateTime, updateBy, updateId);
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.avatar = avatar;
+        this.sex = sex;
+        this.status = status;
+    }
 }
