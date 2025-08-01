@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: sika-file-server
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sika_file
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: wjc52292
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+  # token 名称（同时也是 cookie 名称）
+  token-name: sika
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 2592000
+  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  active-timeout: -1
+  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  is-share: false
+  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+  token-style: random-64
+  # 是否输出操作日志
+  is-log: true
+
+
+
+
+
+springdoc:
+  info:
+    title: 'API 文档系统'
+    version: '1.0.0'
+    description: |
+      项目核心接口文档
+      - 认证类型：Bearer Token
+      - 数据格式：JSON
+    contact:
+      name: 技术支持
+      email: 2235569493@qq.com
+    license:
+      name: Apache 2.0
+      url: https://www.apache.org/licenses/LICENSE-2.0
+  swagger-ui:
+    path: /swagger-ui.html     # 原生UI路径（可选）
+    tags-sorter: alpha         # 接口分组排序
+    operations-sorter: alpha   # 接口排序
+  api-docs:
+    path: /v3/api-docs         # OpenAPI定义路径
+  group-configs:               # 文档分组配置
+    - group: '默认接口'
+      paths-to-match: /**
+      packages-to-scan: cc.sika.file.controller
+
+knife4j:
+  enable: true                 # 启用Knife4j增强功能
+  setting:
+    language: zh-CN            # 中文界面
+    enableFooter: false        # 关闭页脚
+    enableSwaggerModels: true  # 显示模型定义
+  documents:                   # 文档管理（可选）
+    - group: 'V2.0'
+      locations: classpath:markdown/v2.md
+  production: false            # 生产环境建议设为true（禁用文档）
+
