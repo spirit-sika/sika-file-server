@@ -1,8 +1,8 @@
 package cc.sika.file.controller;
 
+import cc.sika.file.entity.dto.PermissionDto;
 import cc.sika.file.entity.po.SikaPermission;
 import cc.sika.file.service.SikaPermissionService;
-import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -11,18 +11,5 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("permission")
-public class PermissionController {
-
-    @Resource
-    private SikaPermissionService sikaPermissionService;
-
-    @PostMapping
-    public Boolean post(@RequestBody SikaPermission sikaPermission) {
-        return sikaPermissionService.saveOrUpdate(sikaPermission);
-    }
-
-    @GetMapping
-    public String getPermissions() {
-        return "greeting!";
-    }
+public class PermissionController extends BaseController<SikaPermissionService, SikaPermission, PermissionDto> {
 }

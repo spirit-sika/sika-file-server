@@ -2,8 +2,8 @@ spring:
   application:
     name: sika-file-server
   datasource:
-    url: jdbc:postgresql://localhost:5432/sika-file
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:p6spy:postgresql://localhost:5432/sika-file
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     username: postgres
     password: wjc52292
 
@@ -29,9 +29,10 @@ sa-token:
   # 是否输出操作日志
   is-log: true
 
-
-
-
+decorator:
+  datasource:
+    p6spy:
+      logging: slf4j
 
 springdoc:
   info:

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class BaseEntityInfo {
+public abstract class BaseEntityInfo implements BaseEntity {
 
     /**
      * 创建时间
@@ -53,5 +53,4 @@ public abstract class BaseEntityInfo {
      */
     @TableField(value = "update_id")
     private Long updateId;
-
 }

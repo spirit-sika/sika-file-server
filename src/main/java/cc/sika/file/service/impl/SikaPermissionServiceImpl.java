@@ -1,9 +1,8 @@
 package cc.sika.file.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cc.sika.file.entity.po.SikaPermission;
-import cc.sika.file.service.SikaPermissionService;
 import cc.sika.file.mapper.SikaPermissionMapper;
+import cc.sika.file.service.SikaPermissionService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Service;
  * @since 2025-08-01 21:37:38
  */
 @Service
-public class SikaPermissionServiceImpl extends ServiceImpl<SikaPermissionMapper, SikaPermission>
-    implements SikaPermissionService{
+public class SikaPermissionServiceImpl extends BaseServiceImpl<SikaPermissionMapper, SikaPermission>
+    implements SikaPermissionService {
 
 }
 
