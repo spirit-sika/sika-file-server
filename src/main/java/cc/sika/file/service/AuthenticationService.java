@@ -31,4 +31,16 @@ public interface AuthenticationService {
      */
     UserInfoVo getUserInfo(String token);
 
+    /**
+     * 生成图形验证码并返回base64
+     * @return base64
+     */
+    String loadCaptcha();
+
+    /**
+     * 校验验证码
+     *
+     * @param captcha 验证码内容
+     */
+    void verifyCaptcha(String captcha);
 }

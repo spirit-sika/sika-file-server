@@ -4,11 +4,13 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
+ * 登录, 注册等用户信息操作相关异常
+ *
  * @author 小吴来哩
  * @since 2025-03
  */
 @Getter
-public class UserException extends RuntimeException {
+public class UserException extends BaseRuntimeException {
     
     private final Integer code;
     

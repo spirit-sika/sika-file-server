@@ -6,11 +6,12 @@ import java.util.Objects;
 
 /**
  * bean操作与表格操作异常
+ *
  * @author 小吴来哩
  * @since 2025-08
  */
 @SuppressWarnings("unused")
-public class BeanTableException extends RuntimeException {
+public class BeanTableException extends BaseRuntimeException {
 	
 	private final Class<?> beanClass;
 	

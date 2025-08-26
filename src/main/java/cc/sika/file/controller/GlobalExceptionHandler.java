@@ -1,7 +1,10 @@
 package cc.sika.file.controller;
 
 import cc.sika.file.entity.vo.R;
+import cc.sika.file.exception.AuthException;
+import cc.sika.file.exception.BaseRuntimeException;
 import cc.sika.file.exception.BeanTableException;
+import cc.sika.file.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +26,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BeanTableException.class)
     public R<Object> handleBeanTableException(BeanTableException ignoredEx) {
         return R.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器发生错误");
+    }
+
+    @ExceptionHandler(UserException.class)
+    public R<Object> handleUserException(UserException userException) {
+        return R.fail(userException.getCode(), userException.getMessage());
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public R<Object> handleAuthException(AuthException authException) {
+        return R.fail(authException.getCode(), authException.getMessage());
+    }
+
+    @ExceptionHandler(BaseRuntimeException.class)
+    public R<Object> handleBaseRuntimeException(BaseRuntimeException baseRuntimeException) {
+        return R.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), baseRuntimeException.getMessage());
     }
 
 }
