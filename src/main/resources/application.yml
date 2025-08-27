@@ -80,3 +80,5 @@ sika:
   login:
     captcha:
       enable: true
+  upload:
+    temp-path: D:\sika\upload
