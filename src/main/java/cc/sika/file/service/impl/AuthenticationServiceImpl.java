@@ -16,6 +16,7 @@ import cc.sika.file.util.IdGenerator;
 import cc.sika.file.util.RSAUtil;
 import cc.sika.file.util.SecurityUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.bean.BeanUtil;
@@ -34,6 +35,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static cc.sika.file.consts.AuthConsts.CAPTCHA_CODE_KEY;
+import static cc.sika.file.consts.AuthConsts.USER_INFO_KEY;
 import static cc.sika.file.util.SecurityUtil.verifyPassword;
 
 /**
@@ -88,7 +90,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!verifyPassword(decryptedPassword, selectedUser.getPassword())) {
             throw new UserException(HttpStatus.HTTP_BAD_REQUEST, "用户名或密码错误!");
         }
-        return doLogin(selectedUser.getId());
+        return doLogin(selectedUser.getId(), selectedUser);
     }
 
     @Override
@@ -123,8 +125,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    private String doLogin(Long userId) {
-        StpUtil.login(userId);
+    private String doLogin(Long userId, SikaUser sikaUser) {
+        StpUtil.login(userId, new SaLoginParameter().setExtra(USER_INFO_KEY,  sikaUser));
         return StpUtil.getTokenValue();
     }
 
@@ -157,7 +159,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         SikaUser user = buildUser(sikaUser);
         assertInsertSuccess(sikaUserMapper.insert(user));
         // 注册完成直接登录, 登录成功响应token
-        return doLogin(user.getId());
+        return doLogin(user.getId(), user);
     }
 
     @Override
