@@ -1,5 +1,6 @@
 package cc.sika.file.entity.po;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,36 +22,36 @@ public abstract class BaseEntityInfo implements BaseEntity {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 创建人用户名
      */
-    @TableField(value = "create_by")
+    @TableField(value = "create_by", fill = FieldFill.INSERT)
     private String createBy;
 
     /**
      * 创建人id
      */
-    @TableField(value = "create_id")
+    @TableField(value = "create_id", fill = FieldFill.INSERT)
     private Long createId;
 
     /**
      * 更新时间
      */
-    @TableField(value = "update_time")
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 
     /**
      * 更新人用户名
      */
-    @TableField(value = "update_by")
+    @TableField(value = "update_by", fill = FieldFill.UPDATE)
     private String updateBy;
 
     /**
      * 更新人id
      */
-    @TableField(value = "update_id")
+    @TableField(value = "update_id", fill = FieldFill.UPDATE)
     private Long updateId;
 }

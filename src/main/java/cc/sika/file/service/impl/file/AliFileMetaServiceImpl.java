@@ -41,6 +41,7 @@ public class AliFileMetaServiceImpl extends BaseServiceImpl<SikaFileMetaMapper, 
 
     @Resource
     private AliOssUtil aliOssUtil;
+
     private String bucket;
 
     @Resource

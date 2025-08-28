@@ -1,6 +1,7 @@
 package cc.sika.file.service.impl;
 
 import cc.sika.file.entity.dto.LoginDto;
+import cc.sika.file.entity.dto.RegisterDto;
 import cc.sika.file.entity.po.SikaUser;
 import cc.sika.file.entity.vo.UserInfoVo;
 import cc.sika.file.exception.AuthException;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static cc.sika.file.consts.AuthConsts.CAPTCHA_CODE_KEY;
@@ -127,7 +129,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String doRegister(SikaUser sikaUser) {
+    public String doRegister(RegisterDto registerDto) {
+        if (Objects.isNull(registerDto)) {
+            throw new AuthException(HttpStatus.HTTP_UNPROCESSABLE_ENTITY, "注册信息为空!");
+        }
+        SikaUser sikaUser = registerDto.getSikaUser();
+        if (BeanUtil.isEmpty(sikaUser)) {
+            throw new AuthException(HttpStatus.HTTP_UNPROCESSABLE_ENTITY, "注册信息为空!");
+        }
+        verifyCaptcha(registerDto.getCaptcha());
         // 尝试获取用户名并解密
         String name;
         try {
@@ -144,20 +154,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (userExists(name)) {
             throw new UserException(HttpStatus.HTTP_UNPROCESSABLE_ENTITY, String.format("用户名[%s]已存在", name));
         }
-        // 用户注册成功时直接登录并响应token
-        if (StpUtil.isLogin()) {
-            Long loginId = Long.valueOf(StpUtil.getLoginId().toString());
-            SikaUser user = buildUser(sikaUser, loginId);
-            assertInsertSuccess(sikaUserMapper.insert(user));
-        }
-        // 主动注册, 生成新的id
-        else {
-            SikaUser user = buildUser(sikaUser, null);
-            assertInsertSuccess(sikaUserMapper.insert(user));
-            // 注册完成直接登录, 登录成功响应token
-            return doLogin(user.getId());
-        }
-        return "";
+        SikaUser user = buildUser(sikaUser);
+        assertInsertSuccess(sikaUserMapper.insert(user));
+        // 注册完成直接登录, 登录成功响应token
+        return doLogin(user.getId());
     }
 
     @Override
@@ -203,13 +203,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * 构建用户信息对象, 将加密的用户名解密为明文
      *
      * @param registerDTO 用户信息
-     * @param id          用户id, 内部创建时为当前登录人id, 用户主动注册时为新用户id
      * @return 用户信息对象
      */
-    private SikaUser buildUser(SikaUser registerDTO, Long id) {
-        if (ObjectUtil.isNull(id)) {
-            id = idGenerator.newId();
-        }
+    private SikaUser buildUser(SikaUser registerDTO) {
+        Long id = idGenerator.newId();
         String pw;
         String name;
         try {
@@ -232,6 +229,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                             .avatar(registerDTO.getAvatar())
                             .sex(registerDTO.getSex())
                             .status(1)
+                            .createBy(name)
+                            .createId(id)
                             .build();
     }
 }

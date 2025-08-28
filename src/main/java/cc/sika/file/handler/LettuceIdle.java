@@ -1,8 +1,10 @@
-package cc.sika.file.config;
+package cc.sika.file.handler;
 
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisConnectionCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Component;
  * @since 2025-08
  */
 @Component
+@Slf4j
+@EnableScheduling
 public class LettuceIdle {
 
     private static final int IDLE = 60000;
@@ -22,7 +26,8 @@ public class LettuceIdle {
 
     // 1 minutes
     @Scheduled(fixedRate = IDLE)
-    private void configureTasks() {
+    public void configureTasks() {
+        log.info("lettuce idle...");
         dupShowMasterRedisTemplate.execute(RedisConnectionCommands::ping);
     }
 }

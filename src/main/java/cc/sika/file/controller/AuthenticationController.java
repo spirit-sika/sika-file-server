@@ -1,7 +1,7 @@
 package cc.sika.file.controller;
 
 import cc.sika.file.entity.dto.LoginDto;
-import cc.sika.file.entity.po.SikaUser;
+import cc.sika.file.entity.dto.RegisterDto;
 import cc.sika.file.entity.vo.R;
 import cc.sika.file.entity.vo.UserInfoVo;
 import cc.sika.file.service.AuthenticationService;
@@ -37,8 +37,8 @@ public class AuthenticationController {
 
     @PostMapping("register")
     @Operation(summary = "注册")
-    public R<String> register(@RequestBody SikaUser sikaUser) {
-        return R.success(authenticationService.doRegister(sikaUser));
+    public R<String> register(@RequestBody RegisterDto registerDto) {
+        return R.success(authenticationService.doRegister(registerDto));
     }
 
     @PostMapping

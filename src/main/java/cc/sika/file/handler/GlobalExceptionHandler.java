@@ -1,4 +1,4 @@
-package cc.sika.file.controller;
+package cc.sika.file.handler;
 
 import cc.sika.file.entity.vo.R;
 import cc.sika.file.exception.AuthException;

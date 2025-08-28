@@ -14,7 +14,7 @@
             <result property="sex" column="SEX" />
             <result property="status" column="STATUS" />
             <result property="createTime" column="CREATE_TIME" />
-            <result property="craeteBy" column="CRAETE_BY" />
+            <result property="createBy" column="CRAETE_BY" />
             <result property="createId" column="CREATE_ID" />
             <result property="updateTime" column="UPDATE_TIME" />
             <result property="updateBy" column="UPDATE_BY" />
