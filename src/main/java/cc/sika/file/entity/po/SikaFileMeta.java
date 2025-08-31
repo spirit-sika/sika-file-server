@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
-import java.time.LocalDateTime;
 
 /**
  * 文件元数据
@@ -38,22 +37,22 @@ public class SikaFileMeta extends BaseEntityInfo {
     private String originalName;
 
     /**
-     * 原文件携带的创建时间
+     * 文件mime类型
      */
-    @TableField("ORIGINAL_CREATE_TIME")
-    private LocalDateTime originalCreateTime;
+    @TableField("file_mime")
+    private String fileMime;
 
     /**
-     * 原文件携带的最后修改时间
+     * 文件扩展名带.
      */
-    @TableField("ORIGINAL_UPDATE_TIME")
-    private LocalDateTime originalUpdateTime;
+    @TableField("file_extension")
+    private String fileExtension;
 
     /**
-     * 文件类型, 不带.的后缀
+     * 文件大小字节数
      */
-    @TableField("FILE_TYPE")
-    private String fileType;
+    @TableField("file_size")
+    private Long fileSize;
 
     /**
      * S3/OSS存储路径(加密)
