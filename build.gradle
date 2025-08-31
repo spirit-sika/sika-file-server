@@ -46,7 +46,9 @@ dependencies {
 	implementation 'com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:4.5.0'
 	// Sa-Token 权限认证，在线文档：https://sa-token.cc
 	implementation 'cn.dev33:sa-token-spring-boot3-starter:1.44.0'
-	implementation 'cn.dev33:sa-token-redis-template:1.44.0'
+    // Sa-Token 整合 jwt
+    implementation 'cn.dev33:sa-token-jwt:1.44.0'
+    implementation 'cn.dev33:sa-token-redis-template:1.44.0'
 	implementation 'org.apache.commons:commons-pool2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -60,7 +62,10 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
     implementation("jakarta.activation:jakarta.activation-api:2.1.3")
     implementation("org.glassfish.jaxb:jaxb-runtime:4.0.5")
-
+    // https://mvnrepository.com/artifact/org.apache.tika/tika-core
+    implementation("org.apache.tika:tika-core:3.2.2")
+    // https://mvnrepository.com/artifact/org.apache.tika/tika-parsers-standard-package
+    implementation("org.apache.tika:tika-parsers-standard-package:3.2.2")
 }
 
 tasks.named('test') {
