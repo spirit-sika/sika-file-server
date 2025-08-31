@@ -5,6 +5,7 @@ import cc.sika.file.exception.AuthException;
 import cc.sika.file.exception.BaseRuntimeException;
 import cc.sika.file.exception.BeanTableException;
 import cc.sika.file.exception.UserException;
+import cn.dev33.satoken.exception.NotLoginException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,6 +42,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BaseRuntimeException.class)
     public R<Object> handleBaseRuntimeException(BaseRuntimeException baseRuntimeException) {
         return R.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), baseRuntimeException.getMessage());
+    }
+
+    @ExceptionHandler(NotLoginException.class)
+    public R<Object> handleNotLoginException() {
+        return R.fail(HttpStatus.UNAUTHORIZED.value(), "请先登录");
     }
 
 }

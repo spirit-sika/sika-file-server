@@ -2,6 +2,7 @@ package cc.sika.file.controller;
 
 import cc.sika.file.entity.vo.R;
 import cc.sika.file.service.SikaFileMetaService;
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import reactor.core.publisher.Flux;
 @RequestMapping("file")
 @Tag(name = "文件管理", description = "文件目录树, 文件上传, 下载, 修改, 预览相关相关接口")
 @Slf4j
+@SaCheckLogin
 public class FileController {
 
     @Resource

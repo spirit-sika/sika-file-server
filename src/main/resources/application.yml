@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-request-size: 3000MB
+      max-file-size: 100MB
   application:
     name: sika-file-server
   datasource:
@@ -47,6 +51,7 @@ sa-token:
   token-style: random-64
   # 是否输出操作日志
   is-log: true
+  jwt-secret-key: asdasdasifhueuiwyuryywbfj11afjk
 
 decorator:
   datasource:
