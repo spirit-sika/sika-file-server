@@ -20,6 +20,16 @@ public interface FileUploadService {
     String uploadAsync(MultipartFile file);
 
     /**
+     * 异步上传文件, 将文件挂载到指定的目录下
+     *
+     * @param file     文件
+     * @param parentId 上级目录ID
+     * @return oss访问路径
+     */
+    String uploadAsync(MultipartFile file, String parentId);
+
+
+    /**
      * 同步上传文件
      *
      * @param file 文件
@@ -28,11 +38,29 @@ public interface FileUploadService {
     String uploadSync(MultipartFile file);
 
     /**
+     * 同步上传文件, 将文件挂载到指定的目录下
+     *
+     * @param file     文件
+     * @param parentId 上级目录ID
+     * @return oss访问路径
+     */
+    String uploadSync(MultipartFile file, String parentId);
+
+    /**
      * 上传文件同时回传上传进度
      *
      * @param file 文件
      * @return 进度流
      */
     Flux<Integer> uploadAndGet(MultipartFile file);
+
+    /**
+     * 上传文件同时回传上传进度, 将文件挂载到指定的目录下
+     *
+     * @param file     文件
+     * @param parentId 上级目录ID
+     * @return 进度流
+     */
+    Flux<Integer> uploadAndGet(MultipartFile file, String parentId);
 
 }

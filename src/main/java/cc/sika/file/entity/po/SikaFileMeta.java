@@ -1,5 +1,6 @@
 package cc.sika.file.entity.po;
 
+import cc.sika.file.consts.FileConsts;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -29,6 +30,16 @@ public class SikaFileMeta extends BaseEntityInfo {
      */
     @TableId(value = "id")
     private String id;
+
+    @TableField(value = "parent_id")
+    private String parentId;
+
+    /**
+     * 元类型, 1-文件夹, 2-文件
+     * @see FileConsts.MetaType 元类型
+     */
+    @TableField(value = "meta_type")
+    private Integer metaType;
 
     /**
      * 原始文件名
