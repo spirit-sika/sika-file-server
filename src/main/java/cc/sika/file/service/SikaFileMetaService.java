@@ -1,7 +1,9 @@
 package cc.sika.file.service;
 
+import cc.sika.file.entity.dto.FileMetaDto;
 import cc.sika.file.entity.po.SikaFileMeta;
 import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,9 +15,13 @@ import java.util.List;
  * @author 小吴来哩
  * @since 2025-08
  */
+@SuppressWarnings("unused")
 public interface SikaFileMetaService extends BaseService<SikaFileMeta>, FileUploadService {
 
     String ROOT = null;
+    String ROOT_ID = "/";
+    String ROOT_PATH = "/";
+    String SEPARATOR = "/";
 
     String FILE_NAME_SEPARATOR = "________";
 
@@ -53,6 +59,13 @@ public interface SikaFileMetaService extends BaseService<SikaFileMeta>, FileUplo
     List<SikaFileMeta> listFileInLayer(@Nullable String id);
 
     /**
+     * 分页查询id下的文件夹和文件
+     * @param fileMetaDto 查询条件以及分页信息
+     * @return -
+     */
+    IPage<SikaFileMeta> pageFileInLayer(FileMetaDto fileMetaDto);
+
+    /**
      * 创建文件夹
      *
      * @param dirName  目录名称
@@ -81,4 +94,10 @@ public interface SikaFileMetaService extends BaseService<SikaFileMeta>, FileUplo
      */
     void removeBatch(List<String> ids);
 
+    /**
+     * 获取文件信息
+     * @param id id
+     * @return -
+     */
+    SikaFileMeta getMetaInfo(String id);
 }

@@ -31,7 +31,9 @@ public class BaseInfoMetaObjectHandler implements MetaObjectHandler {
         }
 
         Object extra = StpUtil.getExtra(USER_INFO_KEY);
-        if (ObjectUtil.isNotNull(extra) && BeanUtil.isNotEmpty(extra) && extra instanceof SikaUser user) {
+
+        if (ObjectUtil.isNotNull(extra) && BeanUtil.isNotEmpty(extra)) {
+            SikaUser user = BeanUtil.toBean(extra, SikaUser.class);
             strictInsertFill(metaObject, "createBy", String.class, user.getUsername());
             strictInsertFill(metaObject, "createId", Long.class, user.getId());
         }
@@ -42,7 +44,8 @@ public class BaseInfoMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
 
         Object extra = StpUtil.getExtra(USER_INFO_KEY);
-        if (ObjectUtil.isNotNull(extra) && BeanUtil.isNotEmpty(extra) && extra instanceof SikaUser user) {
+        if (ObjectUtil.isNotNull(extra) && BeanUtil.isNotEmpty(extra)) {
+            SikaUser user = BeanUtil.toBean(extra, SikaUser.class);
             strictInsertFill(metaObject, "updateBy", String.class, user.getUsername());
             strictInsertFill(metaObject, "updateId", Long.class, user.getId());
         }

@@ -11,6 +11,7 @@ public class FileConsts {
      * 元数据类型
      */
     public static class MetaType {
+        public static final int ALL_TYPE = -1;
         public static final int DIR = 1;
         public static final int FILE = 2;
 

@@ -22,7 +22,6 @@ import java.io.Serial;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@SuppressWarnings("all")
 public class SikaFileMeta extends BaseEntityInfo {
 
     /**
@@ -78,10 +77,16 @@ public class SikaFileMeta extends BaseEntityInfo {
     private String previewPath;
 
     /**
-     * 文件系统中的路径
+     * 文件系统中的路径, 使用/分隔
      */
     @TableField("ABSOLUTE_PATH")
     private String absolutePath;
+
+    /**
+     * 文件系统中的id路径, 使用/分隔
+     */
+    @TableField("ABSOLUTE_ID_PATH")
+    private String absoluteIdPath;
 
     /**
      * 文件哈希(校验完整性)
