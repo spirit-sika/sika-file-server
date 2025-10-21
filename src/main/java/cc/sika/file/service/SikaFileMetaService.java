@@ -19,6 +19,7 @@ import java.util.List;
 public interface SikaFileMetaService extends BaseService<SikaFileMeta>, FileUploadService {
 
     String ROOT = null;
+    String ROOT_NAME = "root";
     String ROOT_ID = "/";
     String ROOT_PATH = "/";
     String SEPARATOR = "/";

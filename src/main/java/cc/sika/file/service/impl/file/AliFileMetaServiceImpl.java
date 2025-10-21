@@ -7,6 +7,7 @@ import cc.sika.file.exception.FileUploadException;
 import cc.sika.file.util.AliOssUtil;
 import cc.sika.file.util.TikaUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aliyun.oss.OSS;
@@ -184,7 +185,10 @@ public class AliFileMetaServiceImpl extends FileServiceAdapter {
 
     @Override
     public Flux<Integer> uploadAndGet(MultipartFile file, String parentId) {
-        assertParentAvailable(parentId);
+        if (CharSequenceUtil.isBlank(parentId) || ROOT_NAME.equals(parentId)) {
+            return uploadAndGet(file);
+        }
+//        assertParentAvailable(parentId);
         notEmpty(file);
         // 构建文件名, 使用 UUID 前缀去重
         final String originalFilename = file.getOriginalFilename();
@@ -373,13 +377,13 @@ public class AliFileMetaServiceImpl extends FileServiceAdapter {
 
     private void saveFileMeta(String ossUrl, String originalName, byte[] bytes) {
         // 处理文件写入
-        SikaFileMeta sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, ossUrl, bytes, ROOT);
+        SikaFileMeta sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, bytes, ROOT);
         baseMapper.insert(sikaFileMeta);
     }
 
     private void saveFileMeta(String ossUrl, String originalName, byte[] bytes, String parentId) {
         // 处理文件写入
-        SikaFileMeta sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, ossUrl, bytes, parentId);
+        SikaFileMeta sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, bytes, parentId);
         baseMapper.insert(sikaFileMeta);
     }
 
@@ -387,7 +391,7 @@ public class AliFileMetaServiceImpl extends FileServiceAdapter {
         // 处理文件写入
         SikaFileMeta sikaFileMeta;
         try {
-            sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, ossUrl, fileSize, file, ROOT);
+            sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, fileSize, file, ROOT);
         }
         catch (IOException e) {
             log.error("生成文件元数据失败!", e);
@@ -401,7 +405,7 @@ public class AliFileMetaServiceImpl extends FileServiceAdapter {
         // 处理文件写入
         SikaFileMeta sikaFileMeta;
         try {
-            sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, ossUrl, fileSize, file, parentId);
+            sikaFileMeta = buildFileMeta(originalName, ossUrl, ossUrl, fileSize, file, parentId);
         }
         catch (IOException e) {
             log.error("生成文件元数据失败!", e);
@@ -411,9 +415,29 @@ public class AliFileMetaServiceImpl extends FileServiceAdapter {
         baseMapper.insert(sikaFileMeta);
     }
 
-    private SikaFileMeta buildFileMeta(String originalName, String ossUrl, String previewPath, String absolutePath, long fileSize, File file, String parentId) throws IOException {
-        String mimeType = tikaUtil.detectMimeType(file);
-        String extension = tikaUtil.getExtensionFromMime(mimeType);
+    private SikaFileMeta buildFileMeta(String originalName, String ossUrl, String previewPath, long fileSize, File file, String parentId) throws IOException {
+
+        // 处理文件绝对路径
+        String keyId = IdUtil.getSnowflakeNextIdStr();
+        String absolutePath;
+        String absoluteIdPath;
+        if (CharSequenceUtil.isBlank(parentId) || ROOT_NAME.equals(parentId)) {
+            absolutePath = ROOT_PATH + originalName;
+            absoluteIdPath = ROOT_ID + keyId;
+        }
+        else {
+            SikaFileMeta dir = baseMapper.selectById(parentId);
+            absolutePath = dir.getAbsolutePath() + SEPARATOR + originalName;
+            absoluteIdPath = dir.getAbsoluteIdPath() + SEPARATOR + keyId;
+        }
+
+        // 处理文件mime和后缀
+        String mimeType = "";
+        String extension = "";
+        if (ObjectUtil.isNotNull(file)) {
+            mimeType = tikaUtil.detectMimeType(file);
+            extension = tikaUtil.getExtensionFromMime(mimeType);
+        }
         // 解析不到扩展名尝试从文件名裁切
         if (CharSequenceUtil.isBlank(extension) && originalName.contains(".")) {
             extension = originalName.substring(originalName.lastIndexOf("."));
@@ -429,18 +453,37 @@ public class AliFileMetaServiceImpl extends FileServiceAdapter {
                 .storagePath(ossUrl)
                 .previewPath(previewPath)
                 .absolutePath(absolutePath)
+                .absoluteIdPath(absoluteIdPath)
                 .sha256(sha256)
                 .regionTarget("ALL")
                 .metaType(FILE)
                 .build();
     }
 
-    private SikaFileMeta buildFileMeta(String originalName, String ossUrl, String previewPath, String absolutePath, byte[] bytes, String parentId) {
-        String mimeType = tikaUtil.detectMimeType(bytes);
-        String extension = tikaUtil.getExtensionFromMime(mimeType);
+    private SikaFileMeta buildFileMeta(String originalName, String ossUrl, String previewPath, byte[] bytes, String parentId) {
+
+        // 处理文件绝对路径
+        String keyId = IdUtil.getSnowflakeNextIdStr();
+        String absolutePath;
+        String absoluteIdPath;
+        if (CharSequenceUtil.isBlank(parentId) || ROOT_NAME.equals(parentId)) {
+            absolutePath = ROOT_PATH + originalName;
+            absoluteIdPath = ROOT_ID + keyId;
+        }
+        else {
+            SikaFileMeta dir = baseMapper.selectById(parentId);
+            absolutePath = dir.getAbsolutePath() + SEPARATOR + originalName;
+            absoluteIdPath = dir.getAbsoluteIdPath() + SEPARATOR + keyId;
+        }
+        String mimeType = "";
+        String extension = "";
+        if (ArrayUtil.isNotEmpty(bytes)) {
+            mimeType = tikaUtil.detectMimeType(bytes);
+            extension = tikaUtil.getExtensionFromMime(mimeType);
+        }
         String sha256 = "";
         return SikaFileMeta.builder()
-                .id(IdUtil.getSnowflakeNextIdStr())
+                .id(keyId)
                 .parentId(parentId)
                 .originalName(originalName)
                 .fileMime(mimeType)
@@ -449,6 +492,7 @@ public class AliFileMetaServiceImpl extends FileServiceAdapter {
                 .storagePath(ossUrl)
                 .previewPath(previewPath)
                 .absolutePath(absolutePath)
+                .absoluteIdPath(absoluteIdPath)
                 .sha256(sha256)
                 .regionTarget("ALL")
                 .metaType(FILE)
