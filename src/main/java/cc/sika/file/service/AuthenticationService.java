@@ -1,7 +1,7 @@
 package cc.sika.file.service;
 
 import cc.sika.file.entity.dto.LoginDto;
-import cc.sika.file.entity.po.SikaUser;
+import cc.sika.file.entity.dto.RegisterDto;
 import cc.sika.file.entity.vo.UserInfoVo;
 
 /**
@@ -19,10 +19,10 @@ public interface AuthenticationService {
 
     /**
      * 用户注册, 注册成功自动登录并返回token
-     * @param sikaUser 用户信息表单
+     * @param registerDto 用户信息表单
      * @return 可用于鉴权的token
      */
-    String doRegister(SikaUser sikaUser);
+    String doRegister(RegisterDto registerDto);
 
     /**
      * 根据token获取用户信息
@@ -31,4 +31,16 @@ public interface AuthenticationService {
      */
     UserInfoVo getUserInfo(String token);
 
+    /**
+     * 生成图形验证码并返回base64
+     * @return base64
+     */
+    String loadCaptcha();
+
+    /**
+     * 校验验证码
+     *
+     * @param captcha 验证码内容
+     */
+    void verifyCaptcha(String captcha);
 }

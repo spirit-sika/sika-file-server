@@ -1,7 +1,7 @@
 package cc.sika.file.controller;
 
 import cc.sika.file.entity.dto.LoginDto;
-import cc.sika.file.entity.po.SikaUser;
+import cc.sika.file.entity.dto.RegisterDto;
 import cc.sika.file.entity.vo.R;
 import cc.sika.file.entity.vo.UserInfoVo;
 import cc.sika.file.service.AuthenticationService;
@@ -12,12 +12,16 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ * 鉴权相关接口控制器
+ * <p>
+ * 处理登录, 注册, 公钥, 验证码相关功能
+ *
  * @author 小吴来哩
  * @since 2025-08
  */
 @RestController
 @RequestMapping("auth")
-@Tag(name = "鉴权/授权管理", description = "用户登录注册与信息获取相关接口")
+@Tag(name = "鉴权管理", description = "用户处理登录, 注册, 公钥, 验证码相关接口")
 public class AuthenticationController {
 
     @Resource
@@ -33,8 +37,8 @@ public class AuthenticationController {
 
     @PostMapping("register")
     @Operation(summary = "注册")
-    public R<String> register(@RequestBody SikaUser sikaUser) {
-        return R.success(authenticationService.doRegister(sikaUser));
+    public R<String> register(@RequestBody RegisterDto registerDto) {
+        return R.success(authenticationService.doRegister(registerDto));
     }
 
     @PostMapping
@@ -54,4 +58,11 @@ public class AuthenticationController {
     public R<String> encrypt(String plainText) {
         return R.success(rsaUtil.encrypt(plainText));
     }
+
+    @GetMapping("captcha")
+    @Operation(summary = "获取验证码")
+    public R<String> getCaptcha() {
+        return R.success(authenticationService.loadCaptcha());
+    }
+
 }

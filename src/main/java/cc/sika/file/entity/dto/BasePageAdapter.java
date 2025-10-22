@@ -16,7 +16,7 @@ import lombok.*;
 public class BasePageAdapter<T extends BaseEntity> implements BasePage<T> {
     private Long current;
     private Long size;
-    private T t;
+    private T condition;
 
 
     @Override
@@ -37,6 +37,6 @@ public class BasePageAdapter<T extends BaseEntity> implements BasePage<T> {
 
     @Override
     public T getCondition() {
-        return t;
+        return condition;
     }
 }
