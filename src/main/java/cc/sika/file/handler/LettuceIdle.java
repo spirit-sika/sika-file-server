@@ -27,7 +27,7 @@ public class LettuceIdle {
     // 1 minutes
     @Scheduled(fixedRate = IDLE)
     public void configureTasks() {
-        log.info("lettuce idle...");
+        log.debug("lettuce idle...");
         dupShowMasterRedisTemplate.execute(RedisConnectionCommands::ping);
     }
 }
